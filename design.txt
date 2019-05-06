@@ -1,0 +1,98 @@
+1. Goal
+The goal of this assignment is to write a program that can be used as a shell
+
+2. Assumptions
+Assuming that there will be a maximum of 10 semicolons
+Assuming that the file path when starting the shell is at most 100 characters
+Assuming that the ampersand means that when there is an error, it writes the error to the file instead of the terminal
+
+3. Design
+Parent process takes in a command to execute
+If there are semi colons, execute each command seperately
+if there are no semicolons, execute the command
+The execute function checks if there any special characters 
+	in the arguments array and parses the arguments accordingly by
+	setting files as standard input or output, or by piping
+The execute function calls execvp on the arguments 
+There is a level of importance. If there is a pipe, the parent process
+	will set the output of left command as the input of the right command
+	before either command is executed. 
+
+4. Pseudocode
+
+proc main(){
+	args <- arguments enter by user
+	if args has semicolon
+		parse args and execute each command individually in a for loop
+	else
+		execute(args)	
+}
+
+proc changeDir(args){
+	if path == ..
+		chdir("..")
+	else if path == NULL
+		chdir(directory when shell started)
+	else
+		chdir(path)
+}
+
+proc execute(args){
+	if args == cd
+		changeDir(args)
+		return
+	declare inputflag = -1
+	declare outputflag = -1
+	declare pipeflag = -1
+	declare ampersandflag = -1
+
+	pid1 = fork()
+	if pid1 == 0 (if current process is the child process){
+		for loop through every argument in args{
+			if argument is '<'
+				inputflag = current index
+			else if argument is '>'
+				outputflag = current index
+			else if argument is '|'
+				pipeflag = current index
+			if argument has '&'
+				ampersandflag = current index
+		}
+		
+		if pipeflag != -1{
+			create a pipe
+			pid2 = fork
+			if pid2 == 0 (if in grandchild process){
+				set pipe as standard input
+				execvp the right command with standard input from pipe
+				exit back to child process
+			}
+			else if pid2 > 0 (if child process){
+				set pipe as standout output
+			}	
+			recursively call execute on the left command and write result into the pipe
+			exit the child process
+		}
+	
+		else if inputflag != -1{
+			place file argument into standard input
+			turn the '<' into a null
+			execvp command with the file as standard input
+			exit the child process
+		}
+	
+		else if outputflag != -1{
+			declare fd as file descriptor to open the file to overwrite
+			if '>>'
+				fd opens the file, but appends insteads of overwrite
+			set the special character to null
+			execvp the command with the file as standard output
+			exit the child process
+		}
+
+	}
+	else if pid1 > 0 (if current process is the parent process that called the fork{
+		wait for child process to exit
+	}
+}
+
