@@ -1,10 +1,10 @@
 1. Goal
-The goal of this assignment is to write a program that can be used as a shell
+The goal of this assignment is to write a program that can be used as a shell.
 
 2. Assumptions
-Assuming that there will be a maximum of 10 semicolons
-Assuming that the file path when starting the shell is at most 100 characters
-Assuming that the ampersand means that when there is an error, it writes the error to the file instead of the terminal
+Assuming that there will be a maximum of 10 semicolons.
+Assuming that the file path when starting the shell is at most 100 characters.
+Assuming that the ampersand means that when there is an error, it writes the error to the file instead of the terminal.
 
 3. Design
 Parent process takes in a command to execute
