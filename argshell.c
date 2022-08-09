@@ -30,7 +30,7 @@ void changeDir(char ** args){
 	}
 	getcwd(directory, 100);
 	printf("%s\n", directory);
-	
+	printf("New Commit");
 }
 
 void execute(char ** args){
