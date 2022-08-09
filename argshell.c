@@ -31,6 +31,7 @@ void changeDir(char ** args){
 	getcwd(directory, 100);
 	printf("%s\n", directory);
 	printf("New Commit");
+	printf("this commit is from A");
 }
 
 void execute(char ** args){
